@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour {
         onFoot.Sprint.performed += ctx => _playerMovement.Sprint();
     }
 
-    private void FixedUpdate() {
+    private void Update() {
         _playerMovement.Move(onFoot.Movement.ReadValue<Vector2>());
         _playerCamera.Look(onFoot.Look.ReadValue<Vector2>());
     }
