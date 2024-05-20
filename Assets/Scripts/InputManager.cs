@@ -5,33 +5,33 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour {
     private PlayerInput _playerInput;
 
-    private PlayerInput.OnFootActions _onFoot;
+    public PlayerInput.OnFootActions onFoot;
 
     private PlayerMovement _playerMovement;
 
     private PlayerCamera _playerCamera;
 
     private void OnEnable() {
-        _onFoot.Enable();
+        onFoot.Enable();
     }
 
     private void OnDisable() {
-        _onFoot.Disable();
+        onFoot.Disable();
     }
 
     private void Awake() {
         _playerInput = new PlayerInput();
-        _onFoot = _playerInput.OnFoot;
+        onFoot = _playerInput.OnFoot;
         _playerMovement = GetComponent<PlayerMovement>();
         _playerCamera = GetComponent<PlayerCamera>();
         
-        _onFoot.Jump.performed += ctx => _playerMovement.Jump();
-        _onFoot.Crouch.performed += ctx => _playerMovement.Crouch();
-        _onFoot.Sprint.performed += ctx => _playerMovement.Sprint();
+        onFoot.Jump.performed += ctx => _playerMovement.Jump();
+        onFoot.Crouch.performed += ctx => _playerMovement.Crouch();
+        onFoot.Sprint.performed += ctx => _playerMovement.Sprint();
     }
 
     private void FixedUpdate() {
-        _playerMovement.Move(_onFoot.Movement.ReadValue<Vector2>());
-        _playerCamera.Look(_onFoot.Look.ReadValue<Vector2>());
+        _playerMovement.Move(onFoot.Movement.ReadValue<Vector2>());
+        _playerCamera.Look(onFoot.Look.ReadValue<Vector2>());
     }
 }
