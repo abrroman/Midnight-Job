@@ -24,15 +24,14 @@ public class InputManager : MonoBehaviour {
         _onFoot = _playerInput.OnFoot;
         _playerMovement = GetComponent<PlayerMovement>();
         _playerCamera = GetComponent<PlayerCamera>();
+        
         _onFoot.Jump.performed += ctx => _playerMovement.Jump();
+        _onFoot.Crouch.performed += ctx => _playerMovement.Crouch();
+        _onFoot.Sprint.performed += ctx => _playerMovement.Sprint();
     }
 
     private void FixedUpdate() {
         _playerMovement.Move(_onFoot.Movement.ReadValue<Vector2>());
         _playerCamera.Look(_onFoot.Look.ReadValue<Vector2>());
-    }
-
-    private void LateUpdate() {
-        
     }
 }
