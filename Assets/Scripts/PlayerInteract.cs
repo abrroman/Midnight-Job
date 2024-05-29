@@ -1,3 +1,5 @@
+using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour {
@@ -13,6 +15,8 @@ public class PlayerInteract : MonoBehaviour {
 
     private InputManager _inputManager;
 
+    private Interactable _currentInteractable;
+
     private void Start() {
         _playerUI = GetComponent<PlayerUI>();
         _inputManager = GetComponent<InputManager>();
@@ -21,16 +25,34 @@ public class PlayerInteract : MonoBehaviour {
     private void Update() {
         _playerUI.UpdateText(string.Empty);
         
-        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * _interactDistance);
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out var hit, _interactDistance)) {
             if (hit.collider.GetComponent<Interactable>()) {
                 Interactable interactable = hit.collider.GetComponent<Interactable>();
-                _playerUI.UpdateText(interactable.interactMessage);
-                if (_inputManager.onFoot.Interact.triggered) {
-                    interactable.BaseInteract();
+                if (_currentInteractable && interactable != _currentInteractable) {
+                    _currentInteractable.DisableOutline();
                 }
+                SetInteractable(interactable);
+                if (_inputManager.onFoot.Interact.triggered) {
+                    _currentInteractable.BaseInteract();
+                }
+            } else {
+                DisableInteractable();
             }
+        } else {
+            DisableInteractable();
         }
-
+    }
+    
+    private void SetInteractable(Interactable newInteractable) {
+        _currentInteractable = newInteractable;
+        _playerUI.UpdateText(_currentInteractable.interactMessage);
+        _currentInteractable.EnableOutline();
+    }
+    
+    private void DisableInteractable() {
+        if (_currentInteractable) {
+            _currentInteractable.DisableOutline();
+            _currentInteractable = null;
+        }
     }
 }

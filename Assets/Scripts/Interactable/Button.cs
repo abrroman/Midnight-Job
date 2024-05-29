@@ -5,9 +5,9 @@ using UnityEngine;
 public class Button : Interactable
 {
 
-    void Start()
-    {
-        
+    private void Start() {
+        _outline = GetComponent<Outline>();
+        DisableOutline();
     }
     
     void Update()
